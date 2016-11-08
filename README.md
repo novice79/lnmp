@@ -15,6 +15,8 @@ n1$ docker run -p 80:80 -p 3306:3306 -p 4567:4567 -p 4444:4444 -p 4568:4568 -d \
 -v "$PWD/cron_task":/etc/cron.d/ \
 -v /my_php_site_src_path:/var/www:rw \
 -v /my/own/datadir:/var/lib/mysql  \
+-e MYSQL_ROOT_PASSWORD=my-secret-pw \
+-e MYSQL_USER=david -e MYSQL_PASSWORD=mypassword -e MYSQL_DATABASE=mydb \
 --name n1 -t novice/lnmp \
 --wsrep-cluster-address=gcomm:// --wsrep-node-address=10.10.10.10
 

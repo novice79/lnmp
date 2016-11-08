@@ -19,7 +19,10 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
 	# These statements _must_ be on individual lines, and _must_ end with
 	# semicolons (no line breaks or comments are permitted).
 	# TODO proper SQL escaping on ALL the things D:
-	
+	if [[ -z "$MYSQL_ROOT_PASSWORD" ]]
+		then
+			MYSQL_ROOT_PASSWORD=freego
+	fi
 	cat > "$tempSqlFile" <<-EOSQL
 		-- What's done in this file shouldn't be replicated
 		--  or products like mysql-fabric won't work
@@ -43,16 +46,16 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
 	if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
 		echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;" >> "$tempSqlFile"
 		echo "CREATE USER '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_PASSWORD' ;" >> "$tempSqlFile"
-  fi
+    fi
 	if [ "$MYSQL_USER" -a ! "$MYSQL_PASSWORD" ]; then
 		echo "CREATE USER '$MYSQL_USER'@'%'  ;"         >> "$tempSqlFile"
 		echo "CREATE USER '$MYSQL_USER'@'localhost'  ;" >> "$tempSqlFile"
-  fi
+    fi
 		
-  if [ "$MYSQL_USER" -a  "$MYSQL_DATABASE"  ]; then
-  	echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
-  	echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'localhost' ;" >> "$tempSqlFile"
-  fi
+	if [ "$MYSQL_USER" -a  "$MYSQL_DATABASE"  ]; then
+		echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
+		echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'localhost' ;" >> "$tempSqlFile"
+	fi
 	
 	echo 'FLUSH PRIVILEGES ;' >> "$tempSqlFile"
 	
