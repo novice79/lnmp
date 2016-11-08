@@ -38,6 +38,8 @@ RUN { \
         php7.0-intl php7.0-mcrypt php7.0-readline php7.0-tidy php7.0-json php7.0-sqlite3 \
         php7.0-bz2 php7.0-mbstring php7.0-xml php7.0-zip php7.0-opcache php7.0-bcmath \
         mariadb-server lsof upstart-sysv \
+    && update-initramfs -u \    
+    && apt-get purge systemd -y \    
 	&& rm -rf /var/lib/apt/lists/* 
     #&& apt-get clean && apt-get autoclean && apt-get remove  
 COPY my.cnf /etc/mysql/my.cnf
