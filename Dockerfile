@@ -57,6 +57,6 @@ RUN chown -R www-data:www-data /var/www && chmod +x /init.sh
 VOLUME ["/var/www", "/var/lib/mysql"]
 
 
-EXPOSE 22 80 443 3306
+EXPOSE 80 443 3306
 
 ENTRYPOINT ["/init.sh"]
