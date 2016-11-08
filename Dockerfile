@@ -13,7 +13,7 @@ RUN apt-get update -y && apt-get install -y \
     software-properties-common python-software-properties supervisor language-pack-en-base \
     curl git vim cron
 
-RUN mkdir -p /var/log/supervisor /var/log/nginx 
+RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php
 
 
 ENV NOTVISIBLE "in users profile"
@@ -50,12 +50,13 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY nginx/freego.crt /etc/ssl/freego.crt
 COPY nginx/freego.key /etc/ssl/freego.key
+COPY init.sh /
 
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www && chmod +x /init.sh
 
 VOLUME ["/var/www", "/var/lib/mysql"]
 
-COPY init.sh /
+
 EXPOSE 22 80 443 3306
 
 ENTRYPOINT ["/init.sh"]
