@@ -11,7 +11,7 @@ ENV LANGUAGE   en_US:en
 
 RUN apt-get update -y && apt-get install -y \
     software-properties-common python-software-properties supervisor language-pack-en-base \
-    curl git vim cron inetutils-ping wget
+    curl git vim cron inetutils-ping wget net-tools
 
 RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php
 
