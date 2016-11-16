@@ -1,8 +1,19 @@
 # lnmp
-for docker lnmp galera test
+for docker lnmp galera test. test in localhost like:
+docker network create david-net
+docker run -p 80:80 --name n1 --net=david-net -d novice/lnmp --wsrep-cluster-address=gcomm:// 
+docker run --name n2  --net=david-net -d novice/lnmp --wsrep-cluster-address=gcomm://n1
+docker run --name n3  --net=david-net -d novice/lnmp --wsrep-cluster-address=gcomm://n1 
+
+docker exec -t n1 mysql -uroot -pfreego -e 'show status like "wsrep_cluster_size"'
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| wsrep_cluster_size | 3     |
++--------------------+-------+
 # build locally
 docker build -t novice/lnmp .
-# run it like this
+# run it on several host like this
 referrence and modified from:
 http://galeracluster.com/2015/05/getting-started-galera-with-docker-part-2-2/
 suppose following 3 nodes
