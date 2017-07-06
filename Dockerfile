@@ -6,12 +6,12 @@ MAINTAINER David <david@cninone.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 ENV LANG       en_US.UTF-8
-ENV LC_ALL	   "en_US.UTF-8"
+ENV LC_ALL	   "C.UTF-8"
 ENV LANGUAGE   en_US:en
 
 RUN apt-get update -y && apt-get install -y \
     software-properties-common python-software-properties supervisor language-pack-en-base \
-    curl git vim cron inetutils-ping wget net-tools
+    curl git vim cron inetutils-ping wget net-tools tzdata redis-server
 
 RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php
 
