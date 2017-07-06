@@ -11,11 +11,17 @@ ENV LANGUAGE   en_US:en
 
 RUN apt-get update -y && apt-get install -y \
     software-properties-common python-software-properties supervisor language-pack-en-base \
-    curl git vim cron inetutils-ping wget net-tools tzdata redis-server
+    openssh-server curl git vim cron inetutils-ping wget net-tools tzdata redis-server
 
-RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php
+RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php /var/run/sshd
 
+RUN useradd -ms /bin/bash david && usermod -aG sudo david
+RUN echo 'david:freego' | chpasswd
+RUN echo 'root:freego_2017' | chpasswd
+# RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile \
     && echo "/var/www *(rw,async,no_subtree_check,insecure)" >> /etc/exports \
@@ -36,7 +42,7 @@ RUN { \
 	&& apt-get update && apt-get install -y nginx \
         php7.0-cli php7.0-common php7.0 php7.0-mysql php7.0-fpm php7.0-curl php7.0-gd \
         php7.0-intl php7.0-mcrypt php7.0-readline php7.0-tidy php7.0-json php7.0-sqlite3 \
-        php7.0-bz2 php7.0-mbstring php7.0-xml php7.0-zip php7.0-opcache php7.0-bcmath \
+        php7.0-bz2 php7.0-mbstring php7.0-xml php7.0-zip php7.0-opcache php7.0-bcmath php-redis \
         mariadb-server lsof upstart-sysv \
     && update-initramfs -u \    
     && apt-get purge systemd -y \    
@@ -53,6 +59,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY nginx/freego.crt /etc/ssl/freego.crt
 COPY nginx/freego.key /etc/ssl/freego.key
 COPY init.sh /
+COPY sources.list /etc/apt/sources.list
 
 RUN chown -R www-data:www-data /var/www && chmod +x /init.sh
 
