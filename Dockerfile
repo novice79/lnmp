@@ -58,10 +58,13 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY nginx/freego.crt /etc/ssl/freego.crt
 COPY nginx/freego.key /etc/ssl/freego.key
+COPY php/www.conf /etc/php/7.0/fpm/pool.d/www.conf
+COPY php/php.ini /etc/php/7.0/fpm/php.ini
 COPY init.sh /
 COPY sources.list /etc/apt/sources.list
 
-RUN chown -R www-data:www-data /var/www && chmod +x /init.sh
+RUN chown -R www-data:www-data /var/www && chmod +x /init.sh \
+    && touch /var/log/php_errors.log && chmod 666 /var/log/php_errors.log
 
 VOLUME ["/var/www", "/var/lib/mysql"]
 
