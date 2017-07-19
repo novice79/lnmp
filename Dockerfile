@@ -32,7 +32,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # mariadb begin
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN wget -qO - https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+RUN wget -qO - https://nginx.org/keys/nginx_signing.key | apt-key add -
 COPY nginx/nginx.list /etc/apt/sources.list.d/nginx.list
 
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
