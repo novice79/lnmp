@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:16.04
 MAINTAINER David <david@cninone.com>
 
 # Get noninteractive frontend for Debian to avoid some problems:
@@ -17,7 +17,7 @@ RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php /var/run/sshd
 
 RUN useradd -ms /bin/bash david && usermod -aG sudo david
 RUN echo 'david:freego' | chpasswd
-RUN echo 'root:freego_2017' | chpasswd
+RUN echo 'root:freego_2018' | chpasswd
 # RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
@@ -37,7 +37,7 @@ COPY nginx/nginx.list /etc/apt/sources.list.d/nginx.list
 
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 RUN add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mariadb.mirror.anstey.ca/repo/10.2/ubuntu xenial main'
-ENV MARIADB_MAJOR 10.2
+ENV MARIADB_MAJOR 10.1
 RUN { \
 		echo mariadb-server-$MARIADB_MAJOR mysql-server/root_password password 'freego'; \
 		echo mariadb-server-$MARIADB_MAJOR mysql-server/root_password_again password 'freego'; \
