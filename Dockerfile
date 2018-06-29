@@ -36,7 +36,7 @@ RUN wget -qO - https://nginx.org/keys/nginx_signing.key | apt-key add -
 COPY nginx/nginx.list /etc/apt/sources.list.d/nginx.list
 
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-RUN add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mariadb.mirror.anstey.ca/repo/10.2/ubuntu xenial main'
+RUN add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mariadb.mirror.anstey.ca/repo/10.1/ubuntu xenial main'
 ENV MARIADB_MAJOR 10.1
 RUN { \
 		echo mariadb-server-$MARIADB_MAJOR mysql-server/root_password password 'freego'; \
