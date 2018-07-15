@@ -46,7 +46,9 @@ RUN { \
         mariadb-server lsof \ 
 	&& rm -rf /var/lib/apt/lists/* 
     #&& apt-get clean && apt-get autoclean && apt-get remove  
-	
+
+# open galera cluster here    
+COPY my.cnf /etc/mysql/my.cnf	
 # mariadb end
 
 COPY nginx/index.php /var/www/index.php
