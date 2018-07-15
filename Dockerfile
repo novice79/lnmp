@@ -10,18 +10,10 @@ ENV LC_ALL	   "C.UTF-8"
 ENV LANGUAGE   en_US:en
 
 RUN apt-get update -y && apt-get install -y \
-    software-properties-common supervisor language-pack-en-base \
-    openssh-server curl git vim cron inetutils-ping wget net-tools tzdata redis-server
+    software-properties-common supervisor language-pack-en-base tzdata
 
-RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php /var/run/sshd
+RUN mkdir -p /var/log/supervisor /var/log/nginx /run/php 
 
-RUN useradd -ms /bin/bash david && usermod -aG sudo david
-RUN echo 'david:freego' | chpasswd
-RUN echo 'root:freego_2018' | chpasswd
-# RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile \
     && echo "/var/www *(rw,async,no_subtree_check,insecure)" >> /etc/exports \
@@ -43,9 +35,9 @@ RUN { \
         php-cli php-common php php-mysql php-fpm php-curl php-gd \
         php-intl php-readline php-tidy php-json php-sqlite3 \
         php-bz2 php-mbstring php-xml php-zip php-opcache php-bcmath php-redis \
-        mariadb-server lsof \ 
-	&& rm -rf /var/lib/apt/lists/* 
-    #&& apt-get clean && apt-get autoclean && apt-get remove  
+        mariadb-server \
+    && apt-get clean && apt-get autoclean && apt-get remove  \
+    && rm -rf /var/lib/apt/lists/* 
 
 # open galera cluster here    
 COPY my.cnf /etc/mysql/my.cnf	
