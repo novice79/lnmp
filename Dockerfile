@@ -38,6 +38,12 @@ RUN { \
         mariadb-server \
     && apt-get clean && apt-get autoclean && apt-get remove  \
     && rm -rf /var/lib/apt/lists/* 
+    
+RUN sed -i 's/^\(pm\.max_children\s*=\s*\).*$/\160/' /etc/php/7.2/fpm/pool.d/www.conf \
+&& sed -i 's/^\(pm\.start_servers\s*=\s*\).*$/\120/' /etc/php/7.2/fpm/pool.d/www.conf \
+&& sed -i 's/^\(pm\.min_spare_servers\s*=\s*\).*$/\120/' /etc/php/7.2/fpm/pool.d/www.conf \
+&& sed -i 's/^\(pm\.max_spare_servers\s*=\s*\).*$/\130/' /etc/php/7.2/fpm/pool.d/www.conf \
+&& sed -i 's/^;\(pm\.max_requests\s*=\s*\).*$/\11000/g' /etc/php/7.2/fpm/pool.d/www.conf
 
 # open galera cluster here    
 COPY my.cnf /etc/mysql/my.cnf	
