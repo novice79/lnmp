@@ -1,7 +1,7 @@
 # lnmp
 for docker lnmp galera test. test in localhost like:
 docker network create david-net
-docker run -p 80:80 --name n1 --net=david-net -d novice/lnmp --wsrep-cluster-address=gcomm:// 
+docker run -p 80:80 --name n1 --net=david-net -d novice/lnmp --wsrep-new-cluster --wsrep-cluster-address=gcomm:// 
 docker run --name n2  --net=david-net -d novice/lnmp --wsrep-cluster-address=gcomm://n1
 docker run --name n3  --net=david-net -d novice/lnmp --wsrep-cluster-address=gcomm://n1 
 
@@ -29,6 +29,7 @@ n1$ docker run -p 80:80 -p 3306:3306 -p 4567:4567 -p 4444:4444 -p 4568:4568 -d \
 -e MYSQL_ROOT_PASSWORD=my-secret-pw \
 -e MYSQL_USER=david -e MYSQL_PASSWORD=mypassword -e MYSQL_DATABASE=mydb \
 --name n1 -t novice/lnmp \
+ --wsrep-new-cluster \
 --wsrep-cluster-address=gcomm:// --wsrep-node-address=10.10.10.10
 
 n2$ docker run -d -p 80:80 -p 3306:3306 -p 4567:4567 -p 4444:4444 -p 4568:4568 \
@@ -50,7 +51,7 @@ In case 3306 occupied, try this way:
 n1$ docker run -d -p 40080:80 -p 40443:443 -p 43306:3306 -p 44567:44567 -p 44444:44444 -p 44568:44568 \
 -v /php_src_path:/var/www:rw \
 -v /data_dir:/var/lib/mysql  \
---name n1 novice/lnmp --wsrep-cluster-address=gcomm:// \
+--name n1 novice/lnmp --wsrep-new-cluster --wsrep-cluster-address=gcomm:// \
 --wsrep-node-address=10.10.10.10:44567 --wsrep-sst-receive-address=10.10.10.10:44444 \
 --wsrep-provider-options="ist.recv_addr=10.10.10.10:44568"
 
