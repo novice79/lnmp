@@ -43,7 +43,10 @@ RUN sed -i 's/^\(pm\.max_children\s*=\s*\).*$/\160/' /etc/php/7.2/fpm/pool.d/www
 && sed -i 's/^\(pm\.start_servers\s*=\s*\).*$/\120/' /etc/php/7.2/fpm/pool.d/www.conf \
 && sed -i 's/^\(pm\.min_spare_servers\s*=\s*\).*$/\120/' /etc/php/7.2/fpm/pool.d/www.conf \
 && sed -i 's/^\(pm\.max_spare_servers\s*=\s*\).*$/\130/' /etc/php/7.2/fpm/pool.d/www.conf \
-&& sed -i 's/^;\(pm\.max_requests\s*=\s*\).*$/\11000/g' /etc/php/7.2/fpm/pool.d/www.conf
+&& sed -i 's/^;\(pm\.max_requests\s*=\s*\).*$/\1500/g' /etc/php/7.2/fpm/pool.d/www.conf \
+&& sed -i 's/^;\(emergency_restart_threshold\s*=\s*\).*$/\110/g' /etc/php/7.2/fpm/php-fpm.conf \
+&& sed -i 's/^;\(emergency_restart_interval\s*=\s*\).*$/\11m/g' /etc/php/7.2/fpm/php-fpm.conf \
+&& sed -i 's/^;\(process_control_timeout\s*=\s*\).*$/\115s/g' /etc/php/7.2/fpm/php-fpm.conf
 
 # open galera cluster here    
 COPY my.cnf /etc/mysql/my.cnf	
