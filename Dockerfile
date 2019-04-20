@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-MAINTAINER David <david@cninone.com>
+LABEL maintainer="novice <novice@piaoyun.shop>"
 
 # Get noninteractive frontend for Debian to avoid some problems:
 #    debconf: unable to initialize frontend: Dialog
@@ -40,7 +40,7 @@ RUN { \
 		echo mariadb-server-$MARIADB_MAJOR mysql-server/root_password_again password 'freego'; \
 	} | debconf-set-selections \
 	&& apt-get update && apt-get install -y nginx \
-        php-cli php-common php php-mysql php-fpm php-curl php-gd \
+        php-cli php-common php php-mysql php-fpm php-curl php-gd php-gmp \
         php-intl php-readline php-tidy php-json php-sqlite3 \
         php-bz2 php-mbstring php-xml php-zip php-opcache php-bcmath php-redis \
         mariadb-server lsof 
